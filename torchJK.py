@@ -63,8 +63,8 @@ class CosineAnnealingWarmUpRestarts(_LRScheduler):
 class PositionalEncoding(torch.nn.Module):
     def __init__(self,
                  emb_size: int,
-                 dropout: float,
-                 maxlen: int = 5000):
+                 dropout: float = 0.1,
+                 maxlen: int = 10000):
         super(PositionalEncoding, self).__init__()
         den = torch.exp(- torch.arange(0, emb_size, 2)* math.log(10000) / emb_size)
         pos = torch.arange(0, maxlen).reshape(maxlen, 1)
@@ -78,4 +78,24 @@ class PositionalEncoding(torch.nn.Module):
 
     def forward(self, token_embedding: torch.Tensor):
         return self.dropout(token_embedding + self.pos_embedding[:token_embedding.size(0), :])    
+ 
+
+class PositionalEmbedding(torch.nn.Module):
+    def __init__(self,
+                 seq_len: int, 
+                 emb_size: int,
+                 dropout: float = 0.1 ):
+        super(PositionalEmbedding, self).__init__()
+        self.seq_len = seq_len
+        self.emb_size = emb_size
+        
+        self.dropout = torch.nn.Dropout(dropout)
+
+        self.pos_embedding = torch.nn.Embedding(seq_len, emb_size)
+                
+    def forward(self, token_embedding: torch.Tensor):
+        device = token_embedding.get_device()
+        scale = torch.sqrt(torch.FloatTensor([self.emb_size])).to(device)
+        pos = torch.arange(0, token_embedding.size(1)).unsqueeze(0).repeat(token_embedding.size(0), 1).to(device)   
+        return self.dropout((token_embedding * scale) + self.pos_embedding(pos))
  
