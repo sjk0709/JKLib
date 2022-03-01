@@ -1,7 +1,7 @@
 import os
 import numpy as np
 
-def create_folder(folder_path):
+def create_folder(folder_path : str):
     '''Create folder'''
     try:
         if not os.path.exists(folder_path):
@@ -15,8 +15,7 @@ def create_folder(folder_path):
 
 
 def main():
-    a = np.arange(10)
-    b = np.arange(10)    
+    create_folder("Test_folder")   
 
     
 
