@@ -4,12 +4,12 @@ import numpy as np
 
 
 
-def get_dist_point_line_2D( a : float, b : float, c : float, x : float, y : float):
+def get_dist_point_line_2D( a : float, b : float, c : float, x : float, y : float) -> float:
     '''Calculate the distance between a point(x,y) and the line(ax+by+c=0)'''
     return abs(a*x + b*y + c)/np.sqrt(a*a+b*b)
 
 
-def get_tangent_yIntercept(p1 : list, p2 : list):
+def get_tangent_yIntercept(p1 : list, p2 : list) :
     '''
     Get the tangent and y-intercept of a line(y=ax+b) from points p1 and p2
 
